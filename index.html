@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#526b55">
+<meta name="description" content="Private daily food and symptom journal with a 21-day elimination tracker.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Food & Symptom Journal</title>
+<style>
+:root{--green:#526b55;--green2:#e8eee7;--cream:#fbf8f2;--ink:#263128;--muted:#68736a;--line:#dfe5dc;--white:#fff;--red:#a33e35}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:var(--green);color:white;padding:22px 18px 18px}header .eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85}h1{font-size:1.55rem;line-height:1.2;margin:5px 0 6px}header p{margin:0;font-size:.95rem;opacity:.94}
+nav{display:flex;gap:7px;padding:10px 12px;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line);overflow-x:auto}
+nav button{border:0;border-radius:999px;padding:10px 13px;background:#f0f2ed;color:var(--ink);white-space:nowrap;font-weight:650}
+nav button.active{background:var(--green);color:white}
+main{max-width:760px;margin:0 auto;padding:15px 13px 38px}.panel{display:none}.panel.active{display:block}
+.card{background:var(--white);border:1px solid var(--line);border-radius:17px;padding:16px;margin-bottom:13px;box-shadow:0 2px 8px #27332808}
+h2{font-size:1.18rem;margin:0 0 12px}h3{font-size:1rem;margin:12px 0 8px}
+label{display:block;font-size:.9rem;font-weight:650;margin:11px 0 5px}
+input,textarea,select{width:100%;border:1px solid #cbd4c9;border-radius:10px;padding:11px 12px;font:inherit;background:#fff;color:var(--ink)}
+textarea{min-height:72px;resize:vertical}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row{display:flex;align-items:center;gap:10px}.row>*{flex:1}
+small,.muted{color:var(--muted);font-size:.85rem}
+.btn{border:0;border-radius:11px;background:var(--green);color:white;font-weight:700;font-size:1rem;padding:12px 15px;cursor:pointer}
+.btn.secondary{background:var(--green2);color:var(--ink)}.btn.danger{background:#f8e8e6;color:var(--red)}.btn.full{width:100%;margin-top:12px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{display:flex;align-items:flex-start;gap:8px;padding:9px;border:1px solid var(--line);border-radius:10px;font-size:.91rem}.check input{width:18px;height:18px;margin:2px 0 0;flex:none}
+.rangeRow{display:flex;justify-content:space-between;align-items:center;gap:10px}.rangeRow input{padding:0;border:0}
+.pill{display:inline-block;background:var(--green2);border-radius:999px;padding:4px 9px;font-size:.8rem;margin:2px 3px 2px 0}
+.entry{border-top:1px solid var(--line);padding:13px 0}.entry:first-child{border-top:0}.entry h3{margin:0 0 5px}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:var(--green2);padding:12px;border-radius:12px}.stat strong{display:block;font-size:1.35rem}.bar{height:9px;border-radius:10px;background:#e5e9e2;overflow:hidden}.bar span{display:block;height:100%;background:var(--green)}
+.notice{background:#fff6df;border:1px solid #ecd9a7;border-radius:12px;padding:12px;font-size:.88rem}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 18px 28px}
+@media(max-width:420px){.grid{grid-template-columns:1fr}.checks{grid-template-columns:1fr}.statgrid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header>
+ <div class="eyebrow">Your private daily journal</div>
+ <h1>Food & Symptom Journal</h1>
+ <p>Notice patterns. Track what you eat and how you feel.</p>
+</header>
+<nav>
+ <button class="active" data-tab="today">Daily log</button>
+ <button data-tab="challenge">21-day plan</button>
+ <button data-tab="history">History</button>
+ <button data-tab="backup">Backup</button>
+</nav>
+<main>
+<section id="today" class="panel active">
+ <div class="card">
+  <h2>Today's entry</h2>
+  <label for="entryDate">Date</label><input type="date" id="entryDate">
+  <label for="breakfast">Breakfast & drinks</label><textarea id="breakfast" placeholder="Food, drinks, ingredients, portions..."></textarea>
+  <label for="lunch">Lunch</label><textarea id="lunch" placeholder="What did you eat?"></textarea>
+  <label for="dinner">Dinner</label><textarea id="dinner" placeholder="What did you eat?"></textarea>
+  <label for="snacks">Snacks, drinks & extras</label><textarea id="snacks" placeholder="Creamer, sauces, snacks, supplements..."></textarea>
+  <h3>Estimate servings for the whole day</h3>
+  <small>These are rough estimates. Use food notes and ingredient labels too.</small>
+  <div class="grid">
+   <div><label for="dairy">Dairy servings</label><input id="dairy" type="number" min="0" step="0.5" placeholder="0"></div>
+   <div><label for="gluten">Gluten-containing servings</label><input id="gluten" type="number" min="0" step="0.5" placeholder="0"></div>
+   <div><label for="wheat">Wheat servings</label><input id="wheat" type="number" min="0" step="0.5" placeholder="0"></div>
+   <div><label for="exposure">Any accidental exposure?</label><select id="exposure"><option value="No">No / none known</option><option value="Possible">Possibly</option><option value="Yes">Yes</option></select></div>
+  </div>
+  <h3>Symptoms experienced today</h3>
+  <div class="checks" id="symptomChecks"></div>
+  <div id="otherWrap" hidden><label for="otherSymptom">Other symptom</label><input id="otherSymptom" placeholder="Describe it"></div>
+  <label for="severity">Overall symptom severity: <strong id="severityText">0 / 10</strong></label>
+  <input id="severity" type="range" min="0" max="10" value="0">
+  <div class="rangeRow"><small>None</small><small>Moderate</small><small>Worst</small></div>
+  <div class="grid">
+   <div><label for="energy">Energy</label><select id="energy"><option value="1">Very low</option><option value="2">Low</option><option value="3" selected>Fair</option><option value="4">Good</option><option value="5">Excellent</option></select></div>
+   <div><label for="sleep">Sleep last night</label><select id="sleep"><option value="1">Very poor</option><option value="2">Poor</option><option value="3" selected>Fair</option><option value="4">Good</option><option value="5">Excellent</option></select></div>
+  </div>
+  <label for="notes">Notes / timing / context</label><textarea id="notes" placeholder="When symptoms started, stress, medications, meal timing, etc."></textarea>
+  <button class="btn full" id="saveEntry">Save daily entry</button>
+  <p id="saveStatus" class="muted" role="status"></p>
+ </div>
+ <div class="notice">Your diary is stored in this browser on this device. Use Backup regularly so you can restore it if you clear browser data or change phones.</div>
+</section>
+<section id="challenge" class="panel">
+ <div class="card">
+  <h2>Your 21-day elimination plan</h2>
+  <p class="muted">Choose the first day you plan to eliminate dairy, gluten and wheat. The app counts calendar days and shows your logged days.</p>
+  <label for="startDate">Elimination start date</label><input id="startDate" type="date">
+  <label for="phase">Current phase</label><select id="phase"><option>Baseline</option><option>Elimination</option><option>Reintroduction</option></select>
+  <button class="btn full" id="savePlan">Save plan</button>
+ </div>
+ <div class="card">
+  <h2 id="dayHeading">Your progress</h2>
+  <div class="statgrid">
+   <div class="stat"><small>Challenge day</small><strong id="dayNum">—</strong></div>
+   <div class="stat"><small>Days logged</small><strong id="daysLogged">0</strong></div>
+   <div class="stat"><small>Goal</small><strong>21</strong></div>
+  </div>
+  <div class="bar" style="margin-top:13px"><span id="progressBar" style="width:0%"></span></div>
+  <p id="challengeMessage" class="muted">Set your start date to begin.</p>
+  <p id="challengeDates" class="muted"></p>
+ </div>
+ <div class="notice"><strong>Before eliminating gluten:</strong> If you have not been evaluated for celiac disease, talk with your clinician before stopping gluten because testing can become less reliable after gluten is removed. A food diary alone cannot diagnose celiac disease or food intolerance.</div>
+</section>
+<section id="history" class="panel">
+ <div class="card">
+  <h2>History & patterns</h2>
+  <p class="muted">Review saved entries and look for patterns over time. A pattern is a clue, not proof that a food caused a symptom.</p>
+  <div class="statgrid">
+   <div class="stat"><small>Entries</small><strong id="histCount">0</strong></div>
+   <div class="stat"><small>Avg. severity</small><strong id="avgSeverity">—</strong></div>
+   <div class="stat"><small>Avg. energy</small><strong id="avgEnergy">—</strong></div>
+  </div>
+  <div id="historyList" style="margin-top:12px"></div>
+ </div>
+</section>
+<section id="backup" class="panel">
+ <div class="card">
+  <h2>Back up your records</h2>
+  <p>Export a copy of your entries and plan to a JSON file. Keep it somewhere safe. You can import that file later to restore your diary.</p>
+  <button class="btn full" id="exportBtn">Export backup file</button>
+  <label for="importFile">Restore from a previous backup</label><input type="file" id="importFile" accept=".json,application/json">
+  <button class="btn secondary full" id="importBtn">Import selected backup</button>
+  <p id="backupStatus" class="muted" role="status"></p>
+  <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+  <h3>Privacy</h3>
+  <p class="muted">This app has no account and does not send your diary to a server. Records live in this browser's local storage. Anyone with access to your unlocked phone/browser profile may be able to view them.</p>
+  <button class="btn danger full" id="clearBtn">Delete all local records</button>
+ </div>
+</section>
+</main>
+<footer>Food & Symptom Journal · For personal tracking, not medical diagnosis.</footer>
+<script>
+const KEY='foodSymptomJournal_v1';
+const symptoms=['Fatigue / low energy','Bloating','Gas','Abdominal pain','Diarrhea','Constipation','Heart racing / palpitations','Headache','Brain fog / difficulty concentrating','Joint or muscle pain','Skin changes / blemishes','Hair loss','Poor sleep','Low libido','Mood changes','Other'];
+let state={entries:{},plan:{startDate:new Date().toISOString().slice(0,10),phase:'Baseline'}};
+const $=id=>document.getElementById(id);
+function today(){return new Date().toISOString().slice(0,10)}
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&typeof v==='object')state={...state,...v};}catch(e){}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(state));renderAll()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderChecks(selected=[]){$('symptomChecks').innerHTML=symptoms.map((s,i)=>`<label class="check"><input type="checkbox" value="${esc(s)}" ${selected.includes(s)?'checked':''}><span>${esc(s)}</span></label>`).join('');const other=[...$('symptomChecks').querySelectorAll('input')].find(x=>x.value==='Other');$('otherWrap').hidden=!(other&&other.checked);$('symptomChecks').querySelectorAll('input').forEach(x=>x.addEventListener('change',()=>{$('otherWrap').hidden=!([...$('symptomChecks').querySelectorAll('input')].some(y=>y.checked&&y.value==='Other'))}))}
+function getForm(){let chosen=[...$('symptomChecks').querySelectorAll('input:checked')].map(x=>x.value);if(chosen.includes('Other')&&$('otherSymptom').value.trim())chosen=chosen.filter(s=>s!=='Other').concat($('otherSymptom').value.trim());return {date:$('entryDate').value,breakfast:$('breakfast').value,lunch:$('lunch').value,dinner:$('dinner').value,snacks:$('snacks').value,dairy:$('dairy').value,gluten:$('gluten').value,wheat:$('wheat').value,exposure:$('exposure').value,symptoms:chosen,severity:+$('severity').value,energy:+$('energy').value,sleep:+$('sleep').value,notes:$('notes').value}}
+function fillForm(e){e=e||{date:$('entryDate').value,symptoms:[],severity:0,energy:3,sleep:3,exposure:'No'};['breakfast','lunch','dinner','snacks','dairy','gluten','wheat','exposure','severity','energy','sleep','notes'].forEach(k=>$(k).value=e[k]??({'severity':0,'energy':3,'sleep':3,'exposure':'No'}[k]??''));$('severityText').textContent=$('severity').value+' / 10';renderChecks(e.symptoms||[]);$('otherSymptom').value=''}
+function saveEntry(){const e=getForm();if(!e.date){$('saveStatus').textContent='Please choose a date.';return}state.entries[e.date]=e;localStorage.setItem(KEY,JSON.stringify(state));$('saveStatus').textContent='Saved on this device.';renderAll()}
+function renderChallenge(){const p=state.plan||{};$('startDate').value=p.startDate||today();$('phase').value=p.phase||'Baseline';const start=p.startDate?new Date(p.startDate+'T00:00:00'):null;const now=new Date(today()+'T00:00:00');const diff=start?Math.floor((now-start)/86400000):0;const day=diff<0?0:Math.min(21,diff+1);const logged=start?Object.keys(state.entries).filter(d=>d>=p.startDate&&d<=new Date(start.getTime()+20*86400000).toISOString().slice(0,10)).length:0;$('dayNum').textContent=start?(diff<0?'Not started':day+'/21'):'—';$('daysLogged').textContent=logged;$('progressBar').style.width=(Math.min(21,logged)/21*100)+'%';$('dayHeading').textContent=day>=21?'21-day period complete':(day>0?'Day '+day+' of 21':'Your progress');$('challengeMessage').textContent=!start?'Set your start date to begin.':diff<0?'Your elimination period has not started yet.':diff>=21?'Your 21-day period has passed. Review your entries and discuss next steps with your clinician.':`${Math.max(0,21-day)} days remaining in the 21-day period.`;$('challengeDates').textContent=start?`Start: ${p.startDate} · Day 21: ${new Date(start.getTime()+20*86400000).toISOString().slice(0,10)} · Phase: ${p.phase||'Baseline'}`:''}
+function renderHistory(){const list=Object.values(state.entries).sort((a,b)=>b.date.localeCompare(a.date));$('histCount').textContent=list.length;$('avgSeverity').textContent=list.length?(list.reduce((s,e)=>s+(+e.severity||0),0)/list.length).toFixed(1):'—';$('avgEnergy').textContent=list.length?(list.reduce((s,e)=>s+(+e.energy||0),0)/list.length).toFixed(1):'—';$('historyList').innerHTML=list.length?list.map(e=>`<div class="entry"><h3>${esc(e.date)} <span class="pill">Severity ${+e.severity||0}/10</span></h3><div>${(e.symptoms||[]).map(s=>`<span class="pill">${esc(s)}</span>`).join('')||'<small>No symptoms selected</small>'}</div><p class="muted">Dairy: ${esc(e.dairy||'0')} · Gluten: ${esc(e.gluten||'0')} · Wheat: ${esc(e.wheat||'0')} · Energy: ${esc(e.energy||'—')}/5 · Sleep: ${esc(e.sleep||'—')}/5</p>${['breakfast','lunch','dinner','snacks','notes'].filter(k=>e[k]).map(k=>`<p><strong>${k[0].toUpperCase()+k.slice(1)}:</strong> ${esc(e[k])}</p>`).join('')}<button class="btn secondary" data-edit="${esc(e.date)}">Edit this day</button> <button class="btn danger" data-delete="${esc(e.date)}">Delete</button></div>`).join(''):'<p class="muted">No entries yet. Save a daily log to start your history.</p>';document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{const date=b.dataset.edit;$('entryDate').value=date;fillForm(state.entries[date]);switchTab('today');window.scrollTo(0,0)});document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{if(confirm('Delete the entry for '+b.dataset.delete+'?')){delete state.entries[b.dataset.delete];persist()}})}
+function renderAll(){renderChallenge();renderHistory()}
+function switchTab(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));if(id==='today'){const d=$('entryDate').value||today();$('entryDate').value=d;fillForm(state.entries[d])}}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+$('entryDate').value=today();$('entryDate').addEventListener('change',()=>fillForm(state.entries[$('entryDate').value]));$('severity').addEventListener('input',()=>$('severityText').textContent=$('severity').value+' / 10');$('saveEntry').addEventListener('click',saveEntry);
+$('savePlan').addEventListener('click',()=>{state.plan={startDate:$('startDate').value,phase:$('phase').value};persist();alert('Plan saved on this device.')});
+$('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='food-symptom-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href);$('backupStatus').textContent='Backup export started.'});
+$('importBtn').addEventListener('click',async()=>{const f=$('importFile').files[0];if(!f){$('backupStatus').textContent='Choose a backup JSON file first.';return}try{const v=JSON.parse(await f.text());if(!v||typeof v.entries!=='object')throw Error('Invalid backup');if(!confirm('Import backup? This replaces the current diary on this device.'))return;state={entries:v.entries||{},plan:v.plan||{startDate:today(),phase:'Baseline'}};persist();$('backupStatus').textContent='Backup restored.'}catch(e){$('backupStatus').textContent='Could not read that backup file.'}});
+$('clearBtn').addEventListener('click',()=>{if(confirm('Delete every food and symptom record stored in this browser? This cannot be undone unless you have a backup.')){state={entries:{},plan:{startDate:today(),phase:'Baseline'}};persist();fillForm();$('backupStatus').textContent='Local records deleted.'}});
+load();$('startDate').value=state.plan.startDate||today();$('phase').value=state.plan.phase||'Baseline';fillForm(state.entries[today()]);renderAll();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
